@@ -7,9 +7,9 @@ import random
 import pandas as pd
 
 
-bower_components = '/home/survey/odf-ctd-proc/webviewer_Files/bower_components'
-custom_js = '/home/survey/odf-ctd-proc/webviewer_Files/js'
-index_file = '/home/survey/odf-ctd-proc/webviewer_Files/index.html'
+bower_components = os.path.join(os.path.dirname(__file__),'webviewer_Files/bower_components')
+custom_js = os.path.join(os.path.dirname(__file__),'webviewer_Files/js')
+index_file = os.path.join(os.path.dirname(__file__),'webviewer_Files/index.html')
 
 dataDir = 'data'
 
