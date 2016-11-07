@@ -1,6 +1,6 @@
 Convert SBE CTD data into engineering units
 
-usage: run.py [-h] [-o output file] [-d] hex File XMLCON File
+usage: run.py [-h] [-o output file] [-d] [-w [dest dir]] hex File XMLCON File
 
 positional arguments:
   hex File        the .hex data file to process
@@ -19,4 +19,4 @@ numpy
 scipy
 gsw
 
-06 Nov 2016
+07 Nov 2016
