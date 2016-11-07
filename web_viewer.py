@@ -88,13 +88,17 @@ class WebViewer():
 			raw_units = next(dataReader)
 			raw_dataType = next(dataReader)
 
+		debugPrint('raw_short_name:', raw_short_name)
+		debugPrint('raw_units:', raw_units)
+		debugPrint('raw_dataType:', raw_dataType)
+
 		proc_idx = []
 		proc_short_name = []
 		proc_units = []
 		proc_dataType = []
 
-		for idx, val in enumerate(raw_short_name):
-			if val != 'empty' and val != 'u_def':
+		for idx, val in enumerate(raw_dataType):
+			if val == 'float64':
 				proc_idx.append(idx)
 				proc_short_name.append(raw_short_name[idx])
 				proc_units.append(raw_units[idx])
