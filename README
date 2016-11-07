@@ -10,6 +10,8 @@ optional arguments:
   -h, --help      show this help message and exit
   -o output file  name and location of output file
   -d, --debug     display debug messages
+  -w [dest dir]   build web viewer, optionally specify the destination
+                  directory for the webviewer files
 
 Dependency requirements:
 python3
