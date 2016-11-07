@@ -120,16 +120,16 @@ def cnv_handler_2(hex_file, xmlcon_file, debug=False):
     #lookup table for sensor data
     ###DOUBLE CHECK TYPE IS CORRECT###
     short_lookup = {
-        '55':{'short_name': 't', 'long_name':'Temperature', 'units': 'C', 'type': 'float64'},
-        '45':{'short_name': 'p', 'long_name':'Pressure', 'units': 'dbar', 'type': 'float64'},
-        '3':{'short_name': 'c', 'long_name':'Conductivity', 'units': 'S/m', 'type':'float64'},
-        '38':{'short_name': 'o', 'long_name':'o', 'units': 'ml/l', 'type':'float64'},
-        '11':{'short_name': 'fluoro', 'long_name':'Fluorometer', 'units': 'ug/l', 'type':'float64'},
+        '55':{'short_name': 't', 'long_name':'SBE 3+ Temperature', 'units': 'C', 'type': 'float64'},
+        '45':{'short_name': 'p', 'long_name':'SBE 9+ Pressure', 'units': 'dbar', 'type': 'float64'},
+        '3':{'short_name': 'c', 'long_name':'SBE 4 Conductivity', 'units': 'S/m', 'type':'float64'},
+        '38':{'short_name': 'o', 'long_name':'SBE 43 Oxygen', 'units': 'ml/l', 'type':'float64'},
+        '11':{'short_name': 'fluoro', 'long_name':'Seapoint Fluorometer', 'units': 'ug/l', 'type':'float64'},
         '27':{'short_name': 'empty', 'long_name':'empty', 'units':'NA', 'type':'NA'},
         '0':{'short_name': 'alti', 'long_name':'Altitude', 'units':'m', 'type':'float64'},
-        '71':{'short_name': 'cstar', 'long_name':'cstart', 'units': 'ug/l', 'type':'float64'},
-        '61':{'short_name': 'u_def', 'long_name':'u_def', 'units':'V', 'type':'float64'},
-        '1000':{'short_name': 'sal', 'long_name':'Salinity', 'units':'PSU', 'type':'float64'}
+        '71':{'short_name': 'cstar', 'long_name':'CStar', 'units': 'ug/l', 'type':'float64'},
+        '61':{'short_name': 'u_def', 'long_name':'user defined', 'units':'V', 'type':'float64'},
+        '1000':{'short_name': 'sal', 'long_name':'Salinity (C1 T1)', 'units':'PSU', 'type':'float64'}
     }
 
     ######
@@ -164,14 +164,14 @@ def cnv_handler_2(hex_file, xmlcon_file, debug=False):
         #oxygen block
         elif str(sensor_id) == '38':
             oxygen_counter += 1
-            queue_metadata.append({'sensor_id': '38', 'list_id': i, 'channel_pos': oxygen_counter, 'ranking': 4, 'data': sbe_reader.parsed_scans[:,i], 'sensor_info':sensor_info[str(i)]})
+            queue_metadata.append({'sensor_id': '38', 'list_id': i, 'channel_pos': oxygen_counter, 'ranking': 5, 'data': sbe_reader.parsed_scans[:,i], 'sensor_info':sensor_info[str(i)]})
 
         #aux block
         else:
-            queue_metadata.append({'sensor_id': sensor_id, 'list_id': i, 'channel_pos': '', 'ranking': 5, 'data': sbe_reader.parsed_scans[:,i], 'sensor_info':sensor_info[str(i)]})
+            queue_metadata.append({'sensor_id': sensor_id, 'list_id': i, 'channel_pos': '', 'ranking': 6, 'data': sbe_reader.parsed_scans[:,i], 'sensor_info':sensor_info[str(i)]})
 
     #a temporary block in order to append basic salinity (t1, c1) to file. If additional salinity is needed (different combinations), it'll need a full reworking
-    queue_metadata.append({'sensor_id': '1000', 'list_id': 1000, 'channel_pos':'', 'ranking': 6, 'data': '', 'sensor_info':''})
+    queue_metadata.append({'sensor_id': '1000', 'list_id': 1000, 'channel_pos':'', 'ranking': 4, 'data': '', 'sensor_info':''})
 
     queue_metadata = sorted(queue_metadata, key = lambda sensor: sensor['ranking'])
 
@@ -274,6 +274,17 @@ def cnv_handler_2(hex_file, xmlcon_file, debug=False):
         except:
             header_3 = header_3 + 'error,'
             errPrint('Error in lookup table: type for sensor ID:', x['sensor_id'])
+
+    ##### ------------HACKY DATETIME INSERTION------------ #####
+    #assumes date/time will always be at end, and adds header accordingly
+    #should be rewritten to have cleaner integration with rest of code
+    header_1 = header_1 + 'lat,lon,new_pos,nmea_time,scan_time\n'
+    header_2 = header_2 + 'dec_deg,dec_deg,boolean,ISO8601,ISO8601\n'
+    header_3 = header_3 + 'float64,float64,bool_,string,string\n'
+
+    ### pos/time/date block
+    data_list_of_lists.append(sbe_reader.parsed_scans[:,(sbe_reader.parsed_scans.shape[1]-1)])
+    ##### ----------HACKY DATETIME INSERTION END---------- #####
 
     debugPrint('Transposing data')
     transposed_data = zip(*data_list_of_lists)
