@@ -42,19 +42,21 @@ This averages the ondeck pressure reading for the selected group of station cast
 
 This reads the log file and applies appropriate offset to selected file.
 
-------------xRange only applies to pressure, otherwise allow to run without arguments
-------------odf_fit_ctd.py automatically applies coefficients to both sensors if CT
+- Range only applies to pressure, otherwise allow to run without arguments
+- odf_fit_ctd.py automatically applies coefficients to both sensors if CT
 
 ### Fit Temperature data ###
 ```
 ./odf_calibrate_ctd.py ssscc-ssscc -temp [-primary:-secondary] -calib P -order [0,1,2] -xRange [min:max]
 ```
-example:
+
+*Example:*
 ```
 ./odf_calibrate_ctd.py 03001-03901 -temp -calib P -primary -order 2 -xRange 1000:6000
 ```
 
 This process reads sbe35 data for selected station casts and compares with ctd bottle data. The residual differences are optimized through a polyfit routine and an optimal set of coefficients are recorded in a log file for each station cast.
+
 *TODO:* need to specify reft_directory in config file and in directory structure for it to work
 
 Flags:
@@ -76,7 +78,7 @@ This reads the log file and applies appropriate coefficients to selected file.
 ./odf_calibrate_ctd.py ssscc-ssscc -cond
 ```
 
-example:
+*Example:*
 ```
 ./odf_calibrate_ctd.py 03001-03901 -cond -calib P -secondary -order 0 -xRange 200:6000
 ```
