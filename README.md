@@ -6,7 +6,7 @@ Please refer to [INSTALL.md](./INSTALL.md) for installation instructions.
 ### Overview of available scripts ###
 #### Utility for converting Seabird Electronics .hex/.XMLCON raw data into csv-formatted text files ####
 ```
-usage: odf_convert_sbe.py [-h] [-d] [-r] [-o destDir] hex_file XMLCON_file
+usage: odf_convert_sbe.py [-h] [-d] [--csv] [-o outputDir] hex_file XMLCON_file
 
 positional arguments:
   hex_file      the .hex data file to process
@@ -15,22 +15,23 @@ positional arguments:
 optional arguments:
   -h, --help    show this help message and exit
   -d, --debug   display debug messages
-  -r, --raw     return the raw data values
-  -o dest_dir   location to save output files
+  -csv          return the converted data values in an csv-formatted file
+  -o output_dir location to save output files
 ```
 
 #### Utility for extracting Niskin bottle firing related data from converted csv-formatted text files ####
 
 ```
-usage: bottle.py [-h] [-o output file] [-d] cnv_file
+usage: odf_process_bottle.py [-h] [-d] [--csv] [-o outputDir] plk_file
 
 positional arguments:
-  cnv_file  the converted csv-formatted file to process
+  pkl_file  the converted pickle-formatted file to process
 
 optional arguments:
-  -h, --help      show this help message and exit
-  -o output_file  name and location of output file
-  -d, --debug     display debug messages
+  -h, --help    show this help message and exit
+  -d, --debug   display debug messages
+  -csv          return the converted data values in an csv-formatted file
+  -o output_dir location to save the output files
 ```
 
 #### Utility for processing ctd sensor related data from converted csv-formatted text files ####

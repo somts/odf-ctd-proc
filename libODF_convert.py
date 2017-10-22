@@ -23,7 +23,8 @@ short_lookup = {
     '20':{'short_name': 'FLUOR', 'long_name':'WetlabECO_AFL_FL_Sensor', 'units':'0-5VDC', 'type':'float64'}, #check short_name later
     '42':{'short_name':'PAR', 'long_name':'PAR/Irradiance, Biospherical/Licor', 'units':'0-5VDC', 'type':'float64'},
     '51':{'short_name':'REF_PAR', 'long_name':'Surface PAR/Irradiance, Biospherical/Licor', 'units':'0-5VDC', 'type':'float64'},
-    '70':{'short_name': 'CTDBACKSCATTER', 'long_name': 'WetlabECO_BB_Sensor', 'units':'0-5VDC', 'type':'float64'}
+    '70':{'short_name': 'CTDBACKSCATTER', 'long_name': 'WetlabECO_BB_Sensor', 'units':'0-5VDC', 'type':'float64'},
+    '67':{'short_name': 'TURBIDITY', 'long_name': 'TurbidityMeter', 'units':'0-5VDC', 'type':'float64'}
 }
 
 
@@ -61,15 +62,22 @@ def convertFromSBEReader(sbeReader, debug=False):
     DEBUG = debug
 
     # Retrieve parsed scans
-    rawData = sbeReader.parsed_scans()
+    rawData = sbeReader.parsed_scans(debug)
 
     # Convert raw data to dataframe
     raw_df = pd.DataFrame(rawData)
     raw_df.index.name = 'index'
+
+    ##########################################
+    #         PLEASE TAKE NOTICE!!!          #
+    ##########################################
+    # Drop the last column (flags)
+    raw_df = raw_df.iloc[:, :-1]
+
     raw_df = raw_df.apply(pd.to_numeric, errors="ignore")
 
-    #debugPrint("Raw Data Types:", raw_df.dtypes)
-    #debugPrint("Raw Data:", raw_df.head)
+    # debugPrint("Raw Data Types:", raw_df.dtypes)
+    # debugPrint("Raw Data:", raw_df.head)
 
     # Retrieve Config data
     rawConfig = sbeReader.parsed_config()
@@ -79,18 +87,18 @@ def convertFromSBEReader(sbeReader, debug=False):
     metaArray = [line.split(',') for line in sbeReader._parse_scans_meta().tolist()]
     metaArrayheaders = sbeReader._breakdown_header()
     meta_df = pd.DataFrame(metaArray)
-    #print(meta_df)
-    #print(metaArrayheaders[0])
+    # debugPrint(meta_df)
+    # debugPrint(metaArrayheaders[0])
     meta_df.columns = metaArrayheaders[0]
     meta_df.index.name = 'index'
 
     for i, x in enumerate(metaArrayheaders[0]):
-        #debugPrint('Set', metaArrayheaders[0][i], 'to', metaArrayheaders[1][i])
+        # debugPrint('Set', metaArrayheaders[0][i], 'to', metaArrayheaders[1][i])
         if not metaArrayheaders[1][i] == 'bool_':
             meta_df[metaArrayheaders[0][i]] = meta_df[metaArrayheaders[0][i]].astype(metaArrayheaders[1][i])
         else:
             meta_df[metaArrayheaders[0][i]] = meta_df[metaArrayheaders[0][i]].str.match('True', na=False)
-            #debugPrint(meta_df[metaArrayheaders[0][i]].head())
+            # debugPrint(meta_df[metaArrayheaders[0][i]].head())
 
     debugPrint('Success!')
 
@@ -245,14 +253,12 @@ def importConvertedFile(file_name, debug=False):
 
     global DEBUG
     DEBUG = debug
-    
+
     """Handler to import converted data from a csv-formatted file created by run.py
     """
     try:
         output_df = pd.read_pickle(file_name)
     except FileNotFoundError:
-        global DEBUG
-        DEBUG = debug
 
         debugPrint("Importing data from:", file_name + '... ', end='')
         output_df = pd.read_csv(file_name, index_col=0, skiprows=[1], parse_dates=False)
@@ -265,10 +271,10 @@ def importConvertedFile(file_name, debug=False):
             dtypeReader.__next__() # skip first row
             dtype_header = dtypeReader.__next__() #second row
             dtype_header.pop(0) #remove 'index' from left of dtype list
-            #debugPrint(dtype_header)
+            # debugPrint(dtype_header)
 
         for i, x in enumerate(dtype_header):
-            #debugPrint('Set', header_raw[i], 'to', dtype_header[i])
+            # debugPrint('Set', header_raw[i], 'to', dtype_header[i])
             if dtype_header[i] == 'bool_':
                 d = {'True': True, 'False': False}
                 output_df[header_raw[i]].map(d)
@@ -286,50 +292,45 @@ def importConvertedFile(file_name, debug=False):
 
 
 def saveConvertedDataToFile(converted_df, filename, debug=False):
+
     global DEBUG
     DEBUG = debug
 
+    # Save the bottle fire dataframe to file.
+    column_names = ['index']
+    column_names += converted_df.columns.tolist()
+    debugPrint("Column Types:", converted_df.dtypes) 
+    debugPrint("Column Names:", ','.join(column_names))
+
+    datatype_names = ['index']
+    for column in converted_df.columns:
+
+        if converted_df[column].dtype.name == 'float64':
+            datatype_names.append('float_')
+        elif converted_df[column].dtype.name == 'datetime64[ns]':
+            datatype_names.append('datetime_')
+        elif converted_df[column].dtype.name == 'bool':
+            datatype_names.append('bool_')
+        elif converted_df[column].dtype.name == 'int64':
+            datatype_names.append('int_')
+        else:
+            datatype_names.append(converted_df[column].dtype.name)
+    debugPrint("Datatypes Names:", ','.join(datatype_names))
+
+    # write the header and dtype rows to file
     try:
-        converted_df.to_pickle(filename)
+        with open(filename, 'w') as f:
+            f.write(','.join(column_names) + '\n')
+            f.write(','.join(datatype_names) + '\n')
     except:
-        # Save the bottle fire dataframe to file.
-        column_names = ['index']
-        column_names += converted_df.columns.tolist()
-        #debugPrint("Column Names:", ','.join(column_names))
-
-        datatype_names = ['index']
-        for column in converted_df.columns:
-
-            if converted_df[column].dtype.name == 'float64':
-                datatype_names.append('float_')
-            elif converted_df[column].dtype.name == 'datetime64[ns]':
-                datatype_names.append('datetime_')
-            elif converted_df[column].dtype.name == 'bool':
-                datatype_names.append('bool_')
-            elif converted_df[column].dtype.name == 'int64':
-                datatype_names.append('int_')
-            else:
-                datatype_names.append(converted_df[column].dtype.name)
-        #debugPrint("Datatypes Names:", ','.join(datatype_names))
-
-        # write the header and dtype rows to file
-        try:
-            with open(filename, 'w') as f:
-                f.write(','.join(column_names) + '\n')
-                f.write(','.join(datatype_names) + '\n')
-        except:
-            errPrint('ERROR: Could not save bottle fire data header to file')
-            return False
-        else:
-            debugPrint('Success!')
-
-        # write the contents of the dataframe to file
-        try:
-            converted_df.to_csv(filename, mode='a', header=False)
-        except:
-            errPrint('ERROR: Could not save bottle fire data to file')
-            return False
-        else:
-            debugPrint('Success!')
-
+        errPrint('ERROR: Could not save data header to file')
+        return False
+    
+    # write the contents of the dataframe to file
+    try:
+        converted_df.to_csv(filename, mode='a', header=False)
+    except:
+        errPrint('ERROR: Could not data to file')
+        return False
+    
     return True

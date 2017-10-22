@@ -63,6 +63,10 @@ def bottle_mean(btl_df):
     while i <= btl_max:
         output = pd.concat((output,btl_df[btl_df[BOTTLE_FIRE_NUM_COL] == i].mean().to_frame(name=i).transpose()))
         i += 1
+
+    output[['new_fix', 'pump_on', 'btl_fire']] = output[['new_fix', 'pump_on', 'btl_fire']].astype(bool)
+    output[['pressure_temp_int', 'btl_fire_num']] = output[['pressure_temp_int', 'btl_fire_num']].astype(int)
+
     return output
 
 def bottle_median(btl_df):
@@ -73,8 +77,11 @@ def bottle_median(btl_df):
     while i <= btl_max:
         output = pd.concat((output,btl_df[btl_df[BOTTLE_FIRE_NUM_COL] == i].median().to_frame(name=i).transpose()))
         i += 1
-    return output
 
+    output[['new_fix', 'pump_on', 'btl_fire']] = output[['new_fix', 'pump_on', 'btl_fire']].astype(bool)
+    output[['pressure_temp_int', 'btl_fire_num']] = output[['pressure_temp_int', 'btl_fire_num']].astype(int)
+
+    return output
 
 #old code
 

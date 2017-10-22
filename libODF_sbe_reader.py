@@ -11,6 +11,15 @@ import sys
 import datetime
 from pytz import timezone
 
+DEBUG = False
+
+def debugPrint(*args, **kwargs):
+    if DEBUG:
+        errPrint(*args, **kwargs)
+
+def errPrint(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
+
 #not currently used
 def parse_frequency_hex(s):
     #return int(s[0:2], 16) * 256 + int(s[2:4], 16) + int(s[4:6], 16)/256
@@ -44,7 +53,7 @@ class SBEReader():
             raise ValueError("The data length does not match the expected length from the config")
 
 
-    def _parse_scans(self):
+    def _parse_scans(self, debug = False):
         '''The order according to the SBE docs are:
         1) Data from the instrument
           a) Frequency (3 bytes each)
@@ -61,11 +70,17 @@ class SBEReader():
         If any of the above are omitted, the length of the hex will be smaller.
         '''
 
+        global DEBUG
+        DEBUG = debug
+
         # parse the frequencies
         #scan_list = list(scan)
         num_frequencies = 5 - self.config["FrequencyChannelsSuppressed"]
         num_voltages = 8 - self.config["VoltageWordsSuppressed"]
         flag_spar = 0
+
+        #debugPrint("num_frequencies:", num_frequencies)
+        #debugPrint("num_voltages:", num_voltages)
 
         if self.config["SurfaceParVoltageAdded"]:
             flag_spar = 1
@@ -74,12 +89,12 @@ class SBEReader():
 
         #specify how each line of raw data should be broken down
         unpack_str = "6s" * num_frequencies + "3s" * num_voltages + "2s" * flag_spar + "4s" * flag_spar + "{}s".format(self.scan_length - num_voltages * 3 - num_frequencies * 6 - flag_spar * 6)
+        
         measurements = np.array([[int(x, 16) for x in line] for line in struct.iter_unpack(unpack_str, the_bytes)])
 
         #this uses numpy magic to just "apply" the needed operations to the correct part of the array all in one go
         measurements[:,:num_frequencies] = measurements[:,:num_frequencies] / 256
         measurements[:,num_frequencies:num_frequencies+num_voltages] = (5 * (1 - (measurements[:,num_frequencies:num_frequencies+num_voltages] / 4095)))
-        #print(measurements.shape)
         return measurements
 
 
