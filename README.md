@@ -1,7 +1,7 @@
 # General Utilities for processing SBE Data
 
 ### Installation ###
-Please refer to INSTALL.md for installation instructions.
+Please refer to [INSTALL.md](./INSTALL.md) for installation instructions.
 
 ### Overview of available scripts ###
 #### Utility for converting Seabird Electronics .hex/.XMLCON raw data into csv-formatted text files ####
@@ -90,9 +90,10 @@ optional arguments:
 ```
 
 ### Additional information ####
- - Please take a look at [INSTALL.md](./INSTALL.md) for instructions on how to install the ODF-CTD-PROC Utilites.
- - Please take a look at [SETUP.md](./SETUP.md) for recommendation on how to setup the SBE CTD Hardware and SBE Data Acquisition software.
- - Please take a look at [COOKBOOK.md](./COOKBOOK.md) for suggestions on how to leverage the ODF-CTD-PROC Utilites in a real-world, at-sea scenario.
+- Please take a look at [SETUP.md](./SETUP.md) for recommendation on how to setup the SBE CTD Hardware and SBE Data Acquisition software.
+- Please take a look at [COOKBOOK.md](./COOKBOOK.md) for suggestions on how to leverage the ODF-CTD-PROC utilities during a cruise.
+- Please take a look at [CTD_PROCESSING.md](./CTD_PROCESSING.md) for instuctions on how to process CTD casts leveraging the ODF-CTD-PROC utilities.
+- Please take a look at [TODO.md](./TODO.md) for to see known issues with ODF-CTD-PROC as well as a roadmap for the project's ongoing development.
 
 ### LICENSING ###
-Please refer to LICENSE.md
+Please refer to [LICENSE.md](./LICENSE.md)
