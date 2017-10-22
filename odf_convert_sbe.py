@@ -37,7 +37,7 @@ def errPrint(*args, **kwargs):
 # -------------------------------------------------------------------------------------
 def main(argv):
 
-    parser = argparse.ArgumentParser(description='Convert SBE raw data to a converted, csv-formatted text file')
+    parser = argparse.ArgumentParser(description='Convert SBE raw data to a converted, pickle-formatted binary file')
     parser.add_argument('hexFile', metavar='hex_file', help='the .hex data file to process')
     parser.add_argument('xmlconFile', metavar='XMLCON_file', help='the .XMLCON data file to process')
 
@@ -51,7 +51,7 @@ def main(argv):
     parser.add_argument('--csv', action='store_true', help='save data values to csv file')
 
     # output directory
-    parser.add_argument('-o', metavar='dest_dir', dest='outDir', help='location to save output files')
+    parser.add_argument('-o', metavar='outputDir', dest='outDir', help='location to save output files')
 
     # Process Command-line args
     args = parser.parse_args()

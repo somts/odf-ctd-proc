@@ -32,8 +32,8 @@ def errPrint(*args, **kwargs):
 # -------------------------------------------------------------------------------------
 def main(argv):
 
-    parser = argparse.ArgumentParser(description='Process bottle fire data from a converted, csv-formatted text file')
-    parser.add_argument('in_file', metavar='in_file', help='the converted data file to process')
+    parser = argparse.ArgumentParser(description='Process bottle fire data from a converted, pickle-formatted binary file')
+    parser.add_argument('in_file', metavar='in_file', help='the pickle-formatted data file to process')
 
     # debug messages
     parser.add_argument('-d', '--debug', action='store_true', help='display debug messages')
@@ -42,7 +42,7 @@ def main(argv):
     parser.add_argument('--csv', action='store_true', help='save data values to csv file')
 
     # output directory
-    parser.add_argument('-o', metavar='dest_dir', dest='outDir', help='location to save output files')
+    parser.add_argument('-o', metavar='outputDir', dest='outDir', help='location to save output files')
 
     args = parser.parse_args()
     if args.debug:
