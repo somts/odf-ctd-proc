@@ -177,7 +177,7 @@ def main(argv):
                 if os.path.isfile(btlfilePath):
                     btl_data = process_ctd.dataToNDarray(btlfilePath,float,True,',',None)
                 else:
-                    print("Missing file: "+btlfilePath)
+                    errPrint("Missing file: "+btlfilePath)
                     break
 
                 timefileName = str(sc + TIME_SUFFIX + '.' + PKL_EXT)
@@ -188,7 +188,7 @@ def main(argv):
                     time_data = time_data.loc[:time_data['CTDPRS'].idxmax()]
                     time_data = time_data.to_records(index=False)
                 else:
-                    print("Missing file: "+timefilePath)
+                    errPrint("Missing file: "+timefilePath)
                     break
 
                 # Find Isopycnal Down Trace Bottle Trip Equivalent
@@ -231,7 +231,7 @@ def main(argv):
 
         if args.order:
             order = int(args.order)
-        else: print('Set polyfit calibration order. Ex: ./odf_calibrate_ctd.py 03001-03901 -cond -secondary -param P -order 2 -prange 0:6000')
+        else: debugPrint('Set polyfit calibration order. Ex: ./odf_calibrate_ctd.py 03001-03901 -cond -secondary -param P -order 2 -prange 0:6000')
 
         btl_num = []
         P1 = []
@@ -318,8 +318,8 @@ def main(argv):
                 btl_data = process_ctd.dataToNDarray(btlfilePath,float,True,',',None)
                 #btl_data = btl_data[:][1:]
             else:
-                print("Missing file: "+btlfilePath)
-                sys.exit()
+                errPrint("Missing file: "+btlfilePath)
+                sys.exit(1)
 
             timefileName = str(filename_base + TIME_SUFFIX + '.' + PKL_EXT)
             timefilePath = os.path.join(time_directory, timefileName)
@@ -329,26 +329,27 @@ def main(argv):
                 time_data = time_data.loc[:time_data['CTDPRS'].idxmax()]
                 time_data = time_data.to_records(index=False)
             else:
-                print("Missing file: "+timefilePath)
-                sys.exit()
+                errPrint("Missing file: "+timefilePath)
+                sys.exit(1)
+                
             ### Load in bottle data (push off into a df)
             if args.temperature:
                 reftfileName = (filename_base + REFT_SUFFIX + '.' + FILE_EXT)
                 reftfilePath = os.path.join(reft_directory, reftfileName)
                 if os.path.isfile(reftfilePath):
-                    print("Processing "+ filename_base)
+                    debugPrint("Processing "+ filename_base)
                     ref_btl = process_ctd.dataToNDarray(reftfilePath,float,True,',',None)
                 else:
-                    print("Missing Reference temperature data for "+ filename_base)
+                    errPrint("Missing Reference temperature data for "+ filename_base)
                     continue
             elif args.conductivity:
                 saltfileName = filename_base
                 saltfilePath = os.path.join(salt_directory, saltfileName)
                 if os.path.isfile(saltfilePath):
-                    print("Processing "+ filename_base)
+                    debugPrint("Processing "+ filename_base)
                     ref_btl, salt_btl = fit_ctd.salt_calc(saltfilePath,btl_num_col,t1_btl_col,p_btl_col,btl_data)
                 else:
-                    print("Missing reference salinity data for "+ filename_base + " in " + salt_directory)
+                    errPrint("Missing reference salinity data for "+ filename_base + " in " + salt_directory)
                     continue
             ### end load bottle data
 

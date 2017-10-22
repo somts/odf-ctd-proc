@@ -1,23 +1,27 @@
 #!/bin/bash
 
 #General Testing
-python3 ./odf_convert_sbe.py -h
-python3 ./odf_process_bottle.py -h
-python3 ./odf_process_ctd.py -h
-python3 ./sampleConvert.py -h
-python3 ./sampleImport.py -h
-python3 ./sampleExport.py -h
+# python3 ./odf_convert_sbe.py -h
+# python3 ./odf_process_bottle.py -h
+# python3 ./odf_process_ctd.py -h
+# python3 ./sampleConvert.py -h
+# python3 ./sampleImport.py -h
+# python3 ./sampleExport.py -h
 
-python3 ./odf_convert_sbe.py -d -o ./unitTesting ./sample_data_dir/raw/GS3601101.hex ./sample_data_dir/raw/GS3601101.XMLCON
+SOURCEDIR="./sampleData"
+FILE_PREFIX="FK171005_CTD005_20171018"
+OUTPUTDIR="./unitTesting"
 
-python3 ./odf_process_bottle.py -d -o ./unitTesting ./unitTesting/GS3601101_cnv.csv
+python3 ./odf_convert_sbe.py -d --csv -o ${OUTPUTDIR} ${SOURCEDIR}/${FILE_PREFIX}.hex ${SOURCEDIR}/${FILE_PREFIX}.XMLCON
 
-python3 ./odf_process_ctd.py -d -i ./unitTesting/GS3601101_cnv.csv ./sample_data_dir/ini-files/configuration.ini
+python3 ./odf_process_bottle.py -d --csv -o ${OUTPUTDIR} ${OUTPUTDIR}/${FILE_PREFIX}_cnv.pkl
 
-python3 ./sampleConvert.py -d ./sample_data_dir/raw/GS3601101.hex ./sample_data_dir/raw/GS3601101.XMLCON
+# python3 ./odf_process_ctd.py -d -i ${OUTPUTDIR}/${FILE_PREFIX}_cnv.csv ${SOURCEDIR}/configuration.ini
 
-python3 ./sampleImport.py -d -w ./unitTesting/GS3601101_cnv.csv
+# python3 ./sampleConvert.py -d ${SOURCEDIR}/${FILE_PREFIX}.hex ${SOURCEDIR}/${FILE_PREFIX}.XMLCON
 
-python3 ./sampleExport.py -d -w ./unitTesting/GS3601101_cnv.csv ./unitTesting/sampleExport_output.csv
+# python3 ./sampleImport.py -d -w ${OUTPUTDIR}/${FILE_PREFIX}_cnv.csv
 
-ls ./unitTesting
+# python3 ./sampleExport.py -d -w ${OUTPUTDIR}/${FILE_PREFIX}_cnv.csv ${OUTPUTDIR}/${FILE_PREFIX}_output.csv
+
+ls ${OUTPUTDIR}

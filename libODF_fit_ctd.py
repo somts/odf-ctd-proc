@@ -36,41 +36,41 @@ def offset(offset, inArr):
 
 def IESRho(s, t, p):
     bars  = p * 0.1
-#/* pressure in bars */
-#/*
-#**  Calculate Rho(s,t,0.0)
-#*/
+    """
+    pressure in bars
+    
+    Calculate Rho(s,t,0.0)
+    """
     rhow  =  (999.842594 +t*
        ( 0.06793952 +t*
        (-0.00909529 +t*
        ( 1.001685e-4+t*
        (-1.120083e-6+t*
        6.536332e-9)))))
-    #/* rhow = density of pure water kg/m**3 */
+    # rhow = density of pure water kg/m**3
     kw    = (((t*(-0.0040899+
        t*( 7.6438e-5+
        t*(-8.2467e-7+
        t*  5.3875e-9))))+
        0.824493)*s)
-    #/* pure water secant bulk modulus */
+    # pure water secant bulk modulus
     termc = s * math.sqrt(s);
     kst0  = ((-0.00572466 +
        t*( 1.0227e-4  +
        t*(-1.6546e-6))) * termc)
-    #/* k(s,t,0) */
+    # k(s,t,0)
     rho   = rhow + kw + kst0 + 4.8314e-4 *s*s
-#      /* rho(s,t,0.0)  kg/m**3 */
-#      /*
-#      **  Calculate pressure effects.
-#      */
+    """
+    rho(s,t,0.0)  kg/m**3
+    Calculate pressure effects.
     if (bars > 0.0):
-#  	/*
-#  	**                 Rho(s,t,0)
-#  	**  Rho(s,t,p) = -------------
-#  	**                        p
-#  	**               1.0 - -------
-#  	**                     k(s,t,p)
-#  	*/
+
+                   Rho(s,t,0)
+    Rho(s,t,p) = -------------
+                        p
+               1.0 - -------
+                     k(s,t,p)
+    """
         kw    = (t*(148.4206          +
            t*( -2.327105        +
            t*(  0.01360477      +
@@ -83,9 +83,9 @@ def IESRho(s, t, p):
            ( 0.07944   +
            t*( 0.016483  +
            t*(-5.3009e-4)))*termc)
-#  	/*
-#  	**  Calculate pressure terms.
-#  	*/
+
+        # Calculate pressure terms.
+
         terma = (    3.239908     +
            t*( 0.00143713   +
            t*( 1.16092e-4   +
@@ -197,22 +197,22 @@ def find_isopycnals(p_btl_col, t_btl_col, sal_btl_col, dov_btl_col, lat_btl_col,
     SA = gsw.SA_from_SP(btl_data[sal_btl_col],btl_data[p_btl_col],btl_data[lon_btl_col],btl_data[lat_btl_col])
     btl_sigma = gsw.sigma0(SA,CT)
     for i in range(0,len(btl_data[p_btl_col])):
-        #CT = gsw.CT_from_t(btl_data[sal_btl_col][i],btl_data[t_btl_col][i],btl_data[p_btl_col][i])
-        #SA = gsw.SA_from_SP(btl_data[sal_btl_col][i],btl_data[p_btl_col][i],btl_data[lon_btl_col][i],btl_data[lat_btl_col][i])
-        #btl_sigma = gsw.sigma0(SA,CT)
+        # CT = gsw.CT_from_t(btl_data[sal_btl_col][i],btl_data[t_btl_col][i],btl_data[p_btl_col][i])
+        # SA = gsw.SA_from_SP(btl_data[sal_btl_col][i],btl_data[p_btl_col][i],btl_data[lon_btl_col][i],btl_data[lat_btl_col][i])
+        # btl_sigma = gsw.sigma0(SA,CT)
         p_indx = find_nearest(time_data[p_col], btl_data[p_btl_col][i])
         indx = find_nearest(time_sigma[p_indx-int(24*1.5):p_indx+int(24*1.5)], btl_sigma[i])
 
-        #print('Bottle:')
-        #print('Sigma: '+str(btl_sigma))
-        #print('Pres: '+str(btl_data[p_btl_col][i]))
-        #print('Temp: '+str(btl_data[t_btl_col][i]))
-        #print('Salt: '+str(btl_data[sal_btl_col][i]))
-        #print('Pressure: '+str(p_indx)+' '+str(indx+p_indx))
-        #print('Sigma: '+str(time_sigma[indx+p_indx]))
-        #print('Pres: '+str(time_data[p_col][indx+p_indx]))
-        #print('Temp: '+str(time_data[t_col][indx+p_indx]))
-        #print('Salt: '+str(time_data[sal_col][indx+p_indx]))
+        # print('Bottle:')
+        # print('Sigma: '+str(btl_sigma))
+        # print('Pres: '+str(btl_data[p_btl_col][i]))
+        # print('Temp: '+str(btl_data[t_btl_col][i]))
+        # print('Salt: '+str(btl_data[sal_btl_col][i]))
+        # print('Pressure: '+str(p_indx)+' '+str(indx+p_indx))
+        # print('Sigma: '+str(time_sigma[indx+p_indx]))
+        # print('Pres: '+str(time_data[p_col][indx+p_indx]))
+        # print('Temp: '+str(time_data[t_col][indx+p_indx]))
+        # print('Salt: '+str(time_data[sal_col][indx+p_indx]))
 
         if indx+p_indx > len(time_sigma):
             btl_data[t_btl_col][i] = time_data[t_col][len(time_data)-1]
@@ -229,26 +229,23 @@ def find_isopycnals(p_btl_col, t_btl_col, sal_btl_col, dov_btl_col, lat_btl_col,
 # Find nearest value to argument in array
 # Return the index of that value
 def find_nearest(yarr, val):
-    """find_nearest
+    # find_nearest
 
-    """
     indx = (np.abs(yarr-val)).argmin()
     return indx
 
 
 # Residual calculation
 def calibration(independent_arr, dependent_diff_arr, order):
-    """calibration
+    # calibration
 
-    """
     return np.polyfit(independent_arr, dependent_diff_arr, order)
 
 
 # Oxygen Coef
 def find_oxy_coef(o2pl, p, t, salt, dov, hexfilePath, xmlfilePath):
-    """fit_oxy fits CTD dissolved oxygen
+    # fit_oxy fits CTD dissolved oxygen
 
-    """
     kelvin = []
     for i in range(0,len(t)):
         kelvin.append(t[i] + 273.15)
@@ -264,6 +261,7 @@ def find_oxy_coef(o2pl, p, t, salt, dov, hexfilePath, xmlfilePath):
 
     coef0 = [oxy_meta['sensor_info']['Soc'], oxy_meta['sensor_info']['offset'], oxy_meta['sensor_info']['A'], oxy_meta['sensor_info']['B'], oxy_meta['sensor_info']['C'], oxy_meta['sensor_info']['E']]
     oxy_data = oxy_dict(coef0, p, kelvin, t, salt, dov)
+
     # Non Linear fit routine
     coefs, flag = leastsq(residualO2, coef0, args=(o2pl.astype(float),p,kelvin,t,salt,dov))
 

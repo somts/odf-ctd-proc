@@ -40,6 +40,10 @@ def retrieveBottleDataFromFile(converted_file, debug=False):
 
 # Retrieve the bottle data from a dataframe created from a converted file.
 def retrieveBottleData(converted_df, debug=False):
+
+    global DEBUG
+    DEBUG = debug
+
     if BOTTLE_FIRE_COL in converted_df.columns:
         converted_df[BOTTLE_FIRE_NUM_COL] = ((converted_df[BOTTLE_FIRE_COL] == True) & (converted_df[BOTTLE_FIRE_COL] != converted_df[BOTTLE_FIRE_COL].shift(1))).astype(int).cumsum()
         #converted_df['bottle_fire_num'] = ((converted_df[BOTTLE_FIRE_COL] == False)).astype(int).cumsum()
@@ -59,6 +63,10 @@ def bottle_mean(btl_df):
     while i <= btl_max:
         output = pd.concat((output,btl_df[btl_df[BOTTLE_FIRE_NUM_COL] == i].mean().to_frame(name=i).transpose()))
         i += 1
+
+    output[['new_fix', 'pump_on', 'btl_fire']] = output[['new_fix', 'pump_on', 'btl_fire']].astype(bool)
+    output[['pressure_temp_int', 'btl_fire_num']] = output[['pressure_temp_int', 'btl_fire_num']].astype(int)
+
     return output
 
 def bottle_median(btl_df):
@@ -69,8 +77,11 @@ def bottle_median(btl_df):
     while i <= btl_max:
         output = pd.concat((output,btl_df[btl_df[BOTTLE_FIRE_NUM_COL] == i].median().to_frame(name=i).transpose()))
         i += 1
-    return output
 
+    output[['new_fix', 'pump_on', 'btl_fire']] = output[['new_fix', 'pump_on', 'btl_fire']].astype(bool)
+    output[['pressure_temp_int', 'btl_fire_num']] = output[['pressure_temp_int', 'btl_fire_num']].astype(int)
+
+    return output
 
 #old code
 
@@ -90,6 +101,9 @@ def handler(converted_file, config_file=False, debug=False):
     Output:
     output: a string of data to be written to file
     """
+
+    global DEBUG
+    DEBUG = debug
 
     with open(converted_file, 'r') as f:
         datareader = csv.reader(f)
@@ -119,7 +133,7 @@ def handler(converted_file, config_file=False, debug=False):
                 #aux struct to hold counter values from group_scans?
 
 
-def line_extract(row, index):
+def line_extract(row, index, debug=False):
     """Given a numpy.array row, determine if a bottle has been fired recently.
     Return True or False to tell the upper level system whether to save the row.
 
@@ -130,6 +144,9 @@ def line_extract(row, index):
     Output:
     True/False: boolean whether a row should be saved or not
     """
+
+    global DEBUG
+    DEBUG = debug
 
     try:
         if row[index] == 'True':

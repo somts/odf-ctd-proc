@@ -190,8 +190,8 @@ def main(argv):
     time_data = time_data.to_records(index=False)
 
     if args.pressure:
-        print('In -pres flag fit condition')
-        print(filename_base)
+        debugPrint('In -pres flag fit condition')
+        debugPrint(filename_base)
         pfileName = str('poffset' + '.' + FILE_EXT)
         pfilePath = os.path.join(log_directory, pfileName)
         poff_data = process_ctd.dataToNDarray(pfilePath,str,None,',',None)
@@ -209,8 +209,8 @@ def main(argv):
         # End pressure if condition
 
     if args.temperature:
-        print('In -temp flag fit condition')
-        print(filename_base)
+        debugPrint('In -temp flag fit condition')
+        debugPrint(filename_base)
         coef1 = []
         coef2 = []
         # Get descrete ref temp data
@@ -247,8 +247,8 @@ def main(argv):
         time_data[t2_col] = fit_ctd.temperature_polyfit(coef2, time_data[p_col], time_data[t2_col])
 
     if args.conductivity:
-        print('In -cond flag fit condition')
-        print(filename_base)
+        debugPrint('In -cond flag fit condition')
+        debugPrint(filename_base)
         coef1 = []
         coef2 = []
 
@@ -291,8 +291,8 @@ def main(argv):
         time_data[sal_col] = gsw.SP_from_C(time_data[c_col],time_data[t_col],time_data[p_col])
 
     if args.oxygen:
-        print('In -oxy flag fit condition')
-        print(filename_base)
+        debugPrint('In -oxy flag fit condition')
+        debugPrint(filename_base)
         # Get Analytical Oxygen data
         o2pkg_btl, o2pl_btl = fit_ctd.o2_calc(o2flask_file,args.oxygen.name,btl_data[btl_num_col],btl_data[sal_btl_col])
 

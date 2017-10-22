@@ -63,14 +63,14 @@ def cast_details(stacast, log_file, p_col, time_col, b_lat_col, b_lon_col, alt_c
     b_alti = float(df_cast2.loc[df_cast2['CTDPRS'].idxmax()]['ALT'])
 
     #last two lines must be in to return the same as old - change to slices of df later
-    report_ctd.report_cast_details(stacast, log_file, start_cast_time, end_cast_time,
-                                   bottom_cast_time, start_pressure, max_pressure, b_alti,
-                                   b_lat, b_lon)
+    report_ctd.report_cast_details(stacast, log_file, start_cast_time, end_cast_time, bottom_cast_time, start_pressure, max_pressure, b_alti, b_lat, b_lon)
     #reconvert to ndarray - might need to be altered to remove second index
     # inMat = df_cast2.loc[:df_cast2['CTDPRS'].idxmax()].to_records(index=False)
     inMat = df_cast2.loc[:df_cast2['CTDPRS'].idxmax()]
 
     return start_cast_time, end_cast_time, bottom_cast_time, start_pressure, max_pressure, b_lat, b_lon, b_alti, inMat
+
+
 #Move next four functions to a library or class(?) Clean up module
 def find_pump_on_off_dfs(df):
     '''Find pump_on patterns of dataframes, and return a list(?) of dataframes to iterate over.
