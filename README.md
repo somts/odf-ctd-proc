@@ -3,7 +3,7 @@
 ### Installation ###
 Please refer to INSTALL.md for installation instructions.
 
-###Overview of available scripts ###
+### Overview of available scripts ###
 #### Utility for converting Seabird Electronics .hex/.XMLCON raw data into csv-formatted text files ####
 ```
 usage: odf_convert_sbe.py [-h] [-d] [-r] [-o destDir] hex_file XMLCON_file
