@@ -6,17 +6,17 @@ data/ini-files/configuration.ini
 ```
 
 Edit the following sections of the configuration file:
-- [cruise] change all values specific to the cruise
-- [ctd_processing]
+- `[cruise]` change all values specific to the cruise
+- `[ctd_processing]`
       ctd_serial: sss
-- [ctd_processing]
+- `[ctd_processing]`
       TC_side: 1->2 for secondary input
-- [inputs] Might need to edit this section depending on the converted file header. This section sets up column call input to data/converted directory.
-- [time_series_output] Should not need to edit this section; maintains time series column headers.
-- [pressure_series_output] Should not need to edit this section; maintains pressure series column headers.
+- `[inputs]` Might need to edit this section depending on the converted file header. This section sets up column call input to data/converted directory.
+- `[time_series_output]` Should not need to edit this section; maintains time series column headers.
+- `[pressure_series_output]` Should not need to edit this section; maintains pressure series column headers.
 
 ### Process CTD Data ###
-For preliminary processing run the following command on each raw data file. The file base name should be ssscc.{hex,XMLCON} (s � station, c - cast).
+For preliminary processing run the following command on each raw data file. The file base name should be ssscc.{hex,XMLCON} (s - station, c - cast).
 
 ```
 ./odf_convert_sbe.py data/raw/ssscc.hex data/raw/ssscc.XMLCON -o data/converted/
@@ -43,7 +43,7 @@ This averages the ondeck pressure reading for the selected group of station cast
 This reads the log file and applies appropriate offset to selected file.
 
 - Range only applies to pressure, otherwise allow to run without arguments
-- odf_fit_ctd.py automatically applies coefficients to both sensors if CT
+- `odf_fit_ctd.py` automatically applies coefficients to both sensors if CT
 
 ### Fit Temperature data ###
 ```
