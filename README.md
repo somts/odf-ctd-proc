@@ -1,15 +1,26 @@
 # General Utilities for processing SBE Data
 
 ### Dependencies:
- - python3 (need minimum version info)
- - numpy (need minimum version info)
- - scipy (need minimum version info)
- - gsw (need minimum version info)
- - matplotlib (need minimum version info)
- - pandas (>= v0.18.1)
+python==3.6
+appdirs==1.4.3
+cycler==0.10.0
+gsw==3.1.1
+matplotlib==2.0.1
+numpy==1.12.1
+packaging==16.8
+pandas==0.19.2
+pyparsing==2.2.0
+python-dateutil==2.6.0
+pytz==2017.2
+requests==2.13.0
+scipy==0.19.0
+six==1.10.0
 
-###Overview of available scripts
-#### Utility for converting Seabird Electronics .hex/.XMLCON raw data into csv-formatted text files
+### Installation ###
+Please refer to INSTALL.md for installation instructions.
+
+###Overview of available scripts ###
+#### Utility for converting Seabird Electronics .hex/.XMLCON raw data into csv-formatted text files ####
 ```
 usage: odf_convert_sbe.py [-h] [-d] [-r] [-o destDir] hex_file XMLCON_file
 
@@ -24,7 +35,7 @@ optional arguments:
   -o dest_dir   location to save output files
 ```
 
-#### Utility for extracting Niskin bottle firing related data from converted csv-formatted text files
+#### Utility for extracting Niskin bottle firing related data from converted csv-formatted text files ####
 
 ```
 usage: bottle.py [-h] [-o output file] [-d] cnv_file
@@ -38,7 +49,7 @@ optional arguments:
   -d, --debug     display debug messages
 ```
 
-#### Utility for processing ctd sensor related data from converted csv-formatted text files
+#### Utility for processing ctd sensor related data from converted csv-formatted text files ####
 
 ```
 usage: odf_process_ctd.py [-h] [-d] [-i cnv_file] [-o dest_dir] ini_file
@@ -54,7 +65,7 @@ optional arguments:
   -o dest_dir  location to save output files
 ```
 
-#### Sample Script for importing converted SBE Data
+#### Sample Script for importing converted SBE Data ####
 ```
 usage: sampleImport.py [-h] [-d] converted_File
 
@@ -66,7 +77,7 @@ optional arguments:
   -d, --debug     display debug messages
 ```  
 
-#### Sample Script for exporting Pandas dataframes to csv-formatted text files with the CLIVAR 2-row header record.
+#### Sample Script for exporting Pandas dataframes to csv-formatted text files with the CLIVAR 2-row header record. ####
 
 ```
 usage: sampleExport.py [-h] [-d] [-w] converted_file output_file
@@ -81,7 +92,7 @@ optional arguments:
   -w, --overwrite  overwrite the pre-existing output file if found
 ```
 
-#### Sample Script for converting raw SBE Data
+#### Sample Script for converting raw SBE Data ####
 ```
 usage: sampleConvert.py [-h] [-d] hex_file XMLCON_file
 
@@ -94,10 +105,10 @@ optional arguments:
   -d, --debug  display debug messages
 ```
 
-### Additional information
+### Additional information ####
  - Please take a look at [INSTALL.md](./INSTALL.md) for instructions on how to install the ODF-CTD-PROC Utilites.
  - Please take a look at [SETUP.md](./SETUP.md) for recommendation on how to setup the SBE CTD Hardware and SBE Data Acquisition software.
  - Please take a look at [COOKBOOK.md](./COOKBOOK.md) for suggestions on how to leverage the ODF-CTD-PROC Utilites in a real-world, at-sea scenario.
 
-### LICENSING
-Coming soon 
+### LICENSING ###
+Please refer to LICENSE.md

@@ -320,6 +320,10 @@ def residual_stddev(df, param):
     output[f'{param}_DEEP'] = df[f'{param}'].std()*2
     return output
 
+"""
+TODO
+Recommended to remove hard-coded values, paths, file names and move to a command-line architecture preferrably in a seperate stand-alone file.
+"""
 def main(argv):
     '''Example run'''
     qual_codes_filepath = f'/Users/jgum/work_code/cruises/P06_2017/quality_codes/'

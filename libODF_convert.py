@@ -243,6 +243,9 @@ def convertFromSBEReader(sbeReader, debug=False):
 
 def importConvertedFile(file_name, debug=False):
 
+    global DEBUG
+    DEBUG = debug
+    
     """Handler to import converted data from a csv-formatted file created by run.py
     """
     try:
@@ -283,6 +286,9 @@ def importConvertedFile(file_name, debug=False):
 
 
 def saveConvertedDataToFile(converted_df, filename, debug=False):
+    global DEBUG
+    DEBUG = debug
+
     try:
         converted_df.to_pickle(filename)
     except:
