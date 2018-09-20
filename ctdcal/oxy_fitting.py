@@ -892,7 +892,6 @@ def create_coef_df(coef_dict):
     coef_df = pd.DataFrame(coef_dict)
     coef_df = coef_df.transpose()
     coef_df.rename(columns={0:'Soc',1:'Voffset',2:'A',3:'B',4:'C',5:'E',6:'Tau20'},inplace=True)
-
     return coef_df
 
 def flag_oxy_data(df):

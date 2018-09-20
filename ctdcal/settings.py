@@ -5,20 +5,20 @@ import pathlib
 
 
 cruise = dict(
-    cruise_title = 'SOCCOM NBP1707',
-    cruise_name = 'nbp1707',
-    cruisedb = 'nbp1707',
-    vessel = 'R/V Palmer',
-    ship_code = '3206',
-    expocode = '320620170820',
-    chief_sci = 'Kevin Speer',
-    sectionid = 'nbp1707',
-    start_date = '2017-08-20 11:00:00',
-    start_port = 'Papeete, French Polynesia',
-    start_latlon = '17.535 S 149.5696 W',
-    end_date = '2017-09-30 10:00:00',
-    end_port = 'Valparaiso, Chile',
-    end_latlon = '33.05 S 71.616 W'
+    cruise_title = '',
+    cruise_name = '',
+    cruisedb = '',
+    vessel = '',
+    ship_code = '',
+    expocode = '',
+    chief_sci = '',
+    sectionid = '',
+    start_date = '',
+    start_port = '',
+    start_latlon = '',
+    end_date = '',
+    end_port = '',
+    end_latlon = ''
 )
 
 ctd_processing_dir = dict(
@@ -59,11 +59,11 @@ ctd_processing_constants = dict(
 
 bottle_inputs = dict(
     p = 'CTDPRS', # Pressure column
-    t = 'CTDTMP1', # CTD Temperature 
-    t1 = 'CTDTMP1', # CTD Temperature 
-    t2 = 'CTDTMP2', # CTD Temperature 
-    c = 'CTDCOND1', # CTD Conductivity 
-    c1 = 'CTDCOND1', # CTD Conductivity 1 
+    t = 'CTDTMP1', # CTD Temperature
+    t1 = 'CTDTMP1', # CTD Temperature
+    t2 = 'CTDTMP2', # CTD Temperature
+    c = 'CTDCOND1', # CTD Conductivity
+    c1 = 'CTDCOND1', # CTD Conductivity 1
     c2 = 'CTDCOND2', # CTD Conductivity 2
     salt = 'CTDSAL', # CTD Salinity
     dopl = 'CTDOXY1', # CTD Oxygen (ml/L)
@@ -73,7 +73,7 @@ bottle_inputs = dict(
     backscatter = 'CTDBACKSCATTER', # Backscatter column
     rinko_oxy = 'FREE1', # Rinko Oxygen column (additional column)
     rinko_temp = 'FREE2', # Rinko Temp column (additional column)
-    alt = 'ALT', # Altimeter 
+    alt = 'ALT', # Altimeter
     ref_par = 'REF_PAR',
     lat = 'GPSLAT', # Latitutde
     lon = 'GPSLON', # Longitude
@@ -93,12 +93,12 @@ bottle_inputs = dict(
 
 btl_input_array = [bottle_inputs['p'], bottle_inputs['t1'], bottle_inputs['t2'], bottle_inputs['c1'], bottle_inputs['c2'],
                    bottle_inputs['dov'], bottle_inputs['dopl'], bottle_inputs['xmis'], bottle_inputs['alt'],
-                   bottle_inputs['rinko_oxy'], bottle_inputs['rinko_temp'], bottle_inputs['lat'], bottle_inputs['lon'], bottle_inputs['pump_on'], bottle_inputs['btl_fire'], 
+                   bottle_inputs['rinko_oxy'], bottle_inputs['rinko_temp'], bottle_inputs['lat'], bottle_inputs['lon'], bottle_inputs['pump_on'], bottle_inputs['btl_fire'],
                    bottle_inputs['scan_datetime'], bottle_inputs['btl_num']]#bottle_inputs['fluor']
 
 #btl_input_array = [bottle_inputs['p'], bottle_inputs['t1'], bottle_inputs['t2'], bottle_inputs['c1'], bottle_inputs['c2'],
 #                   bottle_inputs['dov'], bottle_inputs['dopl'], bottle_inputs['xmis'], bottle_inputs['alt'], bottle_inputs['fluor'], bottle_inputs['backscatter'],
-#                   bottle_inputs['rinko_oxy'], bottle_inputs['rinko_temp'], bottle_inputs['lat'], bottle_inputs['lon'], bottle_inputs['pump_on'], bottle_inputs['btl_fire'], 
+#                   bottle_inputs['rinko_oxy'], bottle_inputs['rinko_temp'], bottle_inputs['lat'], bottle_inputs['lon'], bottle_inputs['pump_on'], bottle_inputs['btl_fire'],
 #                   bottle_inputs['scan_datetime'], bottle_inputs['btl_num']]
 
 ctd_inputs = dict(
@@ -125,7 +125,7 @@ ctd_inputs = dict(
     scan_datetime = 'scan_datetime', # Scan time
     datetime = 'GPSEPOCHTIME', # Time
     lat = 'GPSLAT', # Latitude
-    lon = 'GPSLON', # Longitude    
+    lon = 'GPSLON', # Longitude
 )
 
 ctd_input_array = [ctd_inputs['p'], ctd_inputs['t1'], ctd_inputs['t2'], ctd_inputs['c1'], ctd_inputs['c2'], ctd_inputs['dov'], ctd_inputs['dopl'],
@@ -173,9 +173,8 @@ for s in ssscc:
         pass
 ssscc = list(set(xml_list) & set(hex_list))
 ssscc.sort()
-    
+
 
 
 do_primary = 1 #0
 do_secondary = 1 #0
-

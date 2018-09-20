@@ -1193,7 +1193,10 @@ def load_pressure_logs(file):
     # Change vaules in each row by removing non-number parts
     for i in range(len(df['SSSCC'])):
         df['SSSCC'][i] = int(df['SSSCC'].loc[i][-5:])
-        df['ondeck_start_p'][i] = float(df['ondeck_start_p'].loc[i][16:])
+        try:
+            df['ondeck_start_p'][i] = float(df['ondeck_start_p'].loc[i][16:])
+        except:
+            df['ondeck_start_p'][i] = np.NaN
         df['ondeck_end_p'][i] = float(df['ondeck_end_p'].loc[i][14:])
         
     return df
@@ -1261,27 +1264,17 @@ def load_all_ctd_files(ssscc,prefix,postfix,series,cols,reft_prefix='data/reft/'
                 refc_data.index = btl_data.index
                 
             
-            #Fix Index for each parameter to bottle number
-            
-#            btl_data[index_col] = btl_data[index_col].astype(int)
-#            btl_data=btl_data.set_index(btl_data[index_col].values)
-#            
-#            reft_data = reft_data.set_index(reft_data[index_col].values)
             
             oxy_file = oxy_prefix + x + oxy_postfix
             oxy_data,params = oxy_fitting.oxy_loader(oxy_file)
             
-#            #Horizontally concat DFs to have all data in one DF
-#            btl_data_full = pd.concat([btl_data,reft_data,refc_data,oxy_data],axis=1)
+
             
             btl_data = pd.merge(btl_data,reft_data,on='btl_fire_num',how='outer')
             btl_data = pd.merge(btl_data,refc_data,left_on='btl_fire_num',right_on='SAMPNO',how='outer')
             btl_data = pd.merge(btl_data,oxy_data,left_on='btl_fire_num',right_on='BOTTLENO_OXY',how='outer')
             
             
-#            #Drop columns that have no CTD data
-#            btl_data_full = btl_data_full.dropna(subset=cols)
-            #btl_data = btl_data.set_index(['SSSCC','GPSLAT','GPSLON','CTDPRS'],drop=True)
             try:
                 df_data_all = pd.concat([df_data_all,btl_data],sort=False)
             except AssertionError:

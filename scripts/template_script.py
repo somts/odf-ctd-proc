@@ -215,7 +215,7 @@ def process_all_new():
         btl_data_all[cond_col] = fit_ctd.CR_to_cond(btl_data_all[cr_avg], btl_data_all[bath_temp], btl_data_all[t1_btl_col], btl_data_all[p_btl_col])
         df_cond_good = process_ctd.prepare_fit_data(btl_data_all, cond_col)
 
-        df_ques_refc = process_ctd.quality_check(df_cond_good[c2_btl_col], df_temp_good[c1_btl_col], df_temp_good[p_btl_col], df_temp_good['SSSCC'], df_temp_good['btl_fire_num'], 'quest')
+        df_ques_refc = process_ctd.quality_check(df_cond_good[c2_btl_col], df_cond_good[c1_btl_col], df_cond_good[p_btl_col], df_cond_good['SSSCC'], df_cond_good['btl_fire_num'], 'quest')
         df_ques_refc['Parameter'] = 'REF_COND'
 
     # Second Order Calibration
@@ -311,6 +311,9 @@ def process_all_new():
 
     qual_flag_temp.to_csv('data/logs/qual_flag_temp_new.csv',index=False)
     qual_flag_cond.to_csv('data/logs/qual_flag_cond_new.csv',index=False)
+    # Added to avoid new pull request (put in function later)
+    coef_df['Station'] = coef_df.index
+    coef_df = coef_df[['Station','Soc','Voffset','A','B','C','E','Tau20']]
     coef_df.to_csv('data/logs/oxygen_coef.csv',index=False)
 
 ### Clean up Bottle Data by removing rows with no ctd data
